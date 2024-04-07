@@ -13,13 +13,45 @@ const prismaClient = new PrismaClient({
   log: ["query"],
 });
 
-app.get("/", async () => {
-  return await new HealthCheckController().handle();
+app.get("/", async (_, reply) => {
+  const response = await new HealthCheckController().handle();
+
+  return reply.code(200).send(response);
 });
 
-app.get("/v1/events", async () => {
+app.get("/v1/events", async (_, reply) => {
   const useCase = new GetAllEventsUseCase(new EventRepositoryDb(prismaClient));
-  return await new GetAllEventsController(useCase).handle();
+  const response = await new GetAllEventsController(useCase).handle();
+
+  return reply.code(200).send(response);
+});
+
+app.get("/v1/events/:uuid", async (request, reply) => {
+  const { uuid } = request.params as {
+    uuid: string;
+  };
+
+  const event = await prismaClient.event.findUnique({
+    where: {
+      id: uuid,
+    },
+  });
+
+  if (!event) {
+    return reply.code(404).send({
+      message: "No event found",
+      statusCode: 404,
+      code: "NO_EVENT_FOUND",
+    });
+  }
+
+  return reply.code(200).send({
+    id: event.id,
+    title: event.title,
+    details: event.details,
+    slug: event.slug,
+    maximumAttendees: event.maximumAttendees,
+  });
 });
 
 app.post("/v1/events", async (request, reply) => {
@@ -31,15 +63,14 @@ app.post("/v1/events", async (request, reply) => {
 
   const data = createEventSchema.parse(request.body);
 
-  const event = await prismaClient.event
-    .create({
-      data: {
-        title: data.title,
-        details: data.details,
-        maximumAttendees: data.maximumAttendees,
-        slug: new Date().toISOString(),
-      },
-    });
+  const event = await prismaClient.event.create({
+    data: {
+      title: data.title,
+      details: data.details,
+      maximumAttendees: data.maximumAttendees,
+      slug: new Date().toISOString(),
+    },
+  });
 
   if (event) {
     return reply
