@@ -1,7 +1,6 @@
 import fastify from "fastify";
 import { HealthCheckController } from "./app/controllers/healthcheck/healthCheckController";
 import { GetAllEventsController } from "./app/controllers/event/getAllEventsController";
-import { EventRepositoryMemory } from "./infra/repositories/event/eventRepositoryMemory";
 import { GetAllEventsUseCase } from "./app/useCases/event/getAllEventsUseCase";
 import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
