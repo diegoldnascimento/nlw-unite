@@ -23,8 +23,6 @@ app.get("/v1/events", async () => {
 });
 
 app.post("/v1/events", async (request, reply) => {
-  // const useCase = new GetAllEventsUseCase(new EventRepositoryMemory());
-  // return await new GetAllEventsController(useCase).handle();
   const createEventSchema = z.object({
     title: z.string().min(4),
     details: z.string().nullable(),
