@@ -4,15 +4,17 @@
   "license": "MIT",
   "scripts": {
     "start": "tsx watch src/server.ts",
-    "test": "tsx --test src/**/*.test.ts ", 
+    "test": "tsx --test src/**/*.test.ts ",
     "db:prisma:înit": "prisma init --datasource-provider SQlite"
   },
   "devDependencies": {
     "@types/node": "^20.12.5",
+    "prisma": "5.12.1",
     "tsx": "^4.7.2",
     "typescript": "^5.4.4"
   },
   "dependencies": {
+    "@prisma/client": "5.12.1",
     "fastify": "^4.26.2"
   }
 }
