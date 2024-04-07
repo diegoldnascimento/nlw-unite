@@ -1,5 +1,5 @@
 import { Event } from "../entities/event/event";
 
 export interface EventRepository {
-  getAll: () => Event[];
+  getAll: () => Promise<Event[]>;
 }

@@ -21,7 +21,6 @@ export class GetAllEventsController
 
   async handle() {
     const events = await this.getAllEventsUseCase.execute();
-    console.log({ events });
 
     return events;
   }

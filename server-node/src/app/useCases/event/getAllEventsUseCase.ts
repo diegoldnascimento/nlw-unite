@@ -17,7 +17,7 @@ export class GetAllEventsUseCase implements UseCase<Input, Output> {
   constructor(readonly eventRepository: EventRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const events = this.eventRepository.getAll();
+    const events = await this.eventRepository.getAll();
 
     const output = [];
 
@@ -31,8 +31,6 @@ export class GetAllEventsUseCase implements UseCase<Input, Output> {
       });
     }
 
-    return {
-      ...output,
-    };
+    return output;
   }
 }
