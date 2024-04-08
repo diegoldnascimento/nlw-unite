@@ -5,6 +5,7 @@ import { GetAllEventsUseCase } from "./app/useCases/event/getAllEventsUseCase";
 import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
 import { EventRepositoryDb } from "./infra/repositories/event/eventRepositoryDb";
+import { generateSlug } from "./infra/helpers/generateSlug";
 
 const app = fastify({ logger: true });
 
@@ -62,12 +63,14 @@ app.post("/v1/events", async (request, reply) => {
 
   const data = createEventSchema.parse(request.body);
 
+  const slug = generateSlug(data.title);
+
   const event = await prismaClient.event.create({
     data: {
       title: data.title,
       details: data.details,
       maximumAttendees: data.maximumAttendees,
-      slug: new Date().toISOString(),
+      slug,
     },
   });
 
